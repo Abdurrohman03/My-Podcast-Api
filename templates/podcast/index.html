@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<!-- Mirrored from preview.colorlib.com/theme/mypodcast/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 04 Feb 2023 15:44:21 GMT -->
+<head>
+    <title>My Podcast</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="My Podcast template project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap-4.1.2/bootstrap.min.css' %}">
+    <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'plugins/colorbox/colorbox.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+    <script nonce="e2c513e3-e42d-4ac7-8f8e-178dad25c0f4">
+        (function(w,d){!function(f,g,h,i){f[h]=f[h]||{};f[h].executed=[];f.zaraz={deferred:[],listeners:[]};f.zaraz.q=[];f.zaraz._f=function(j){return function(){var k=Array.prototype.slice.call(arguments);f.zaraz.q.push({m:j,a:k})}};for(const l of["track","set","debug"])f.zaraz[l]=f.zaraz._f(l);f.zaraz.init=()=>{var m=g.getElementsByTagName(i)[0],n=g.createElement(i),o=g.getElementsByTagName("title")[0];o&&(f[h].t=g.getElementsByTagName("title")[0].text);f[h].x=Math.random();f[h].w=f.screen.width;f[h].h=f.screen.height;f[h].j=f.innerHeight;f[h].e=f.innerWidth;f[h].l=f.location.href;f[h].r=g.referrer;f[h].k=f.screen.colorDepth;f[h].n=g.characterSet;f[h].o=(new Date).getTimezoneOffset();if(f.dataLayer)for(const s of Object.entries(Object.entries(dataLayer).reduce(((t,u)=>({...t[1],...u[1]})))))zaraz.set(s[0],s[1],{scope:"page"});f[h].q=[];for(;f.zaraz.q.length;){const v=f.zaraz.q.shift();f[h].q.push(v)}n.defer=!0;for(const w of[localStorage,sessionStorage])Object.keys(w||{}).filter((y=>y.startsWith("_zaraz_"))).forEach((x=>{try{f[h]["z_"+x.slice(7)]=JSON.parse(w.getItem(x))}catch{f[h]["z_"+x.slice(7)]=w.getItem(x)}}));n.referrerPolicy="origin";n.src="https://preview.colorlib.com/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(f[h])));m.parentNode.insertBefore(n,m)};["complete","interactive"].includes(g.readyState)?zaraz.init():f.addEventListener("DOMContentLoaded",zaraz.init)}(w,d,"zarazData","script");})(window,document);
+    </script>
+</head>
+<body>
+<div class="super_container">
+
+    {% include 'navbar.html' %}
+
+      <div class="menu">
+        <div class="menu_content d-flex flex-column align-items-end justify-content-start">
+            <ul class="menu_nav_list text-right">
+                <li><a href="{% url 'episode:index' %}">Home</a></li>
+                <li><a href="{% url 'about:index' %}">About</a></li>
+                <li><a href="{% url 'episode:episodes' %}">Episodes</a></li>
+                <li><a href="{% url 'blog:list' %}">Blog</a></li>
+                <li><a href="{% url 'contact:index' %}">Contact</a></li>
+            </ul>
+            <div class="menu_extra d-flex flex-column align-items-end justify-content-start">
+                <div class="menu_submit"><a href="#">Submit your podcast</a></div>
+                <div class="social">
+                    <ul class="d-flex flex-row align-items-start justify-content-start">
+                        <li><a href="https://www.facebook.com/Spotify/"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                        <li><a href="https://www.instagram.com/abdurrohman.akbaraliev/"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                        <li><a href="https://soundcloud.com/"><i class="fa fa-soundcloud" aria-hidden="true"></i></a></li>
+                        <li><a href="https://vimeo.com/"><i class="fa fa-vimeo" aria-hidden="true"></i></a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=spotify"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home">
+        <div class="background_image" style="background-image:url({% static 'images/index.jpg' %})"></div>
+        <div class="home_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="home_content">
+                            <div class="tags">
+                                <ul class="d-flex flex-row align-items-start justify-content-start">
+                                    {% for tag in audio.tags.all %}
+                                    <li><a href="#">{{ tag }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="home_title"><h1>Season 4 Episode 48 available.</h1></div>
+                            <div class="home_subtitle">Check out my latest podcast a massive interview with John Doe
+                            </div>
+                            <div class="track_info">
+                                <ul class="d-flex flex-row align-items-start justify-content-start">
+                                    <li><a href="{% url 'episode:episode' audio.id %}">{{ audio.created_date|date:'F d, Y' }}</a></li>
+                                    <li><a href="#">{{ audio.category }}</a></li>
+                                    <li>56:40</li>
+                                    <li><a href="{% url 'episode:episode' audio.id %}#comments">{{ audio.comment_set.count }}</a></li>
+                                </ul>
+                            </div>
+                            <div class="track track_home">
+                                <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+                                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/197004056&amp;color=%23ff5500&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;show_teaser=false"></iframe>
+                            </div>
+                            <div class="button_border home_button trans_200"><a href="{% url 'episode:episode' audio.id %}">More Info</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shows">
+        <div class="container">
+            <div class="row shows_row">
+                {% for object in object_list %}
+                <div class="col-lg-4">
+                    <div class="show">
+                        <div class="show_image">
+                            <a href="{% url 'episode:episode' object.id %}">
+                                <img src="{{ object.image.url }}" alt="https://unsplash.com/@icons8">
+                            </a>
+                            <div class="show_tags">
+                                <div class="tags">
+                                    <ul class="d-flex flex-row align-items-start justify-content-start">
+                                        <li><a href="?cat={{ object.category }}">{{ object.category }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="show_play_icon"><img src="{% static 'images/play.svg' %}"
+                                                             alt="https://www.flaticon.com/authors/cole-bemis"></div>
+                        </div>
+                        <div class="show_content">
+                            <div class="show_date"><a href="{% url 'episode:episode' object.id %}">{{ object.created_date|date:'F d, Y' }}</a></div>
+                            <div class="show_title"><a href="{% url 'episode:episode' object.id %}">{{ object.title }}</a></div>
+                            <div class="show_date"><a href="{% url 'episode:episode' object.id %}">Views: {{ object.views }}</a></div>
+                            <div class="show_info d-flex flex-row align-items-start justify-content-start">
+                                <div class="show_fav d-flex flex-row align-items-center justify-content-start">
+                                    <div data-music_id="{{ object.id }}" class="do_like {% if object.id in my_liked_musics_list %} active {% endif %} show_fav_icon show_info_icon"><img class="svg" src="{% static 'images/heart.svg' %}"
+                                                                                   alt=""></div>
+                                    <div class="show_fav_count">{{ object.like_set.count }}</div>
+                                </div>
+                                <div class="show_comments">
+                                    <a href="{% url 'episode:episode' object.id %}#comments">
+                                        <div class="d-flex flex-row align-items-center justify-content-start">
+                                            <div class="show_comments_icon show_info_icon"><img class="svg"
+                                                                                                src="{% static 'images/speech-bubble.svg' %}"
+                                                                                                alt=""></div>
+                                            <div class="show_comments_count">{{ object.comment_set.count }} Comments</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <div class="button_fill shows_button"><a href="#">browse shows</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weekly">
+        <div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/weekly.jpg' %}"
+             data-speed="0.8"></div>
+        <div class="container">
+            <div class="row row-eq-height">
+
+                <div class="col-lg-6">
+                    <div class="weekly_content d-flex flex-column align-items-start justify-content-lg-center justify-content-start">
+                        <div>
+                            <div class="weekly_title"><h1>Bi-weekly episodes</h1></div>
+                            <div class="weekly_text">
+                                <p>Cras congue et risus eget congue. Integer id justo non orci suscipit cursus a
+                                    scelerisque libero. Fusce in tortor mauris. Orci varius natoque penatibus et magnis
+                                    dis parturient montes, nascetur ridiculus mus. Maecenas euismod sed magna.</p>
+                            </div>
+                            <div class="shops d-flex flex-row align-items-start justify-content-start flex-wrap">
+                                <div class="button_border"><a href="https://music.amazon.com/">Amazon</a></div>
+                                <div class="button_border"><a href="https://www.apple.com/itunes/">Itunes</a></div>
+                                <div class="button_border"><a href="https://open.spotify.com/">Spotify</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="weekly_image">
+                        <img src="{% static 'images/show_3.jpg' %}" alt="">
+                        <div class="logo">
+                            <a href="#" class="d-flex flex-row"><span>my</span>podcast
+                                <div><img src="{% static 'images/play_2.png' %}" alt=""></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shows_2">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="shows_2_title">By Category</div>
+                </div>
+            </div>
+            <div class="row shows_2_row">
+                {% for object in 4_podcasts %}
+                <div class="col-xl-3 col-md-6">
+                    <div class="show">
+                        <div class="show_image">
+                            <a href="{% url 'episode:episode' object.id %}">
+                                <img src="{{ object.image.url }}" alt="https://unsplash.com/@h4rd3n">
+                                <div class="show_play_icon"><img src="{% static 'images/play.svg' %}"
+                                                                 alt="https://www.flaticon.com/authors/cole-bemis">
+                                </div>
+                                <div class="show_title_2">{{ object.title }}</div>
+                            </a>
+                            <div class="show_tags">
+                                <div class="tags">
+                                    <ul class="d-flex flex-row align-items-start justify-content-start">
+                                        <li><a href="#">{{ object.category }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col text-center">
+                    <div class="button_fill shows_2_button"><a href="#">browse shows</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</div>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap-4.1.2/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap-4.1.2/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TimelineMax.min.js' %}"></script>
+<script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'plugins/colorbox/jquery.colorbox-min.js' %}"></script>
+<script src="{% static 'plugins/progressbar/progressbar.min.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993"
+        integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA=="
+        data-cf-beacon='{"rayId":"794486f1cba7fe38","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2022.11.3","si":100}'
+        crossorigin="anonymous"></script>
+<script>
+
+    $('.do_like').on("click", function () {
+        let music_id = $(this).data('music_id')
+
+        $.ajax({
+        url: "http://127.0.0.1:8000/like/",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'music_id': music_id
+        },
+        success: function(res) {
+            alert(res['detail']);
+        },
+        error: function(res) {
+        let err = JSON.parse(res.responseText)
+            alert(err.detail)
+        },
+        });
+    });
+</script>
+</body>
+
+</html>
