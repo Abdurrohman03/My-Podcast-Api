@@ -3,9 +3,9 @@ from episode.models import Tag, Category
 
 
 class Blog(models.Model):
-    title = models.CharField(max_length=225)
-    image = models.ImageField(upload_to='blogs')
-    author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE)
+    title = models.CharField(max_length=225, null=True)
+    image = models.ImageField(upload_to='blogs', null=True)
+    author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE, null=True)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     views = models.IntegerField(default=0)
@@ -18,7 +18,7 @@ class Blog(models.Model):
 
 class CommentBlog(models.Model):
     author = models.ForeignKey('profile.Profile', on_delete=models.SET_NULL, null=True, blank=True)
-    article = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    article = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=225, null=True, blank=True)
