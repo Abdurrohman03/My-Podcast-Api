@@ -42,7 +42,7 @@ class Podcast(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey('profile.Profile', on_delete=models.SET_NULL, null=True, blank=True)
-    article = models.ForeignKey(Podcast, on_delete=models.CASCADE)
+    article = models.ForeignKey(Podcast, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=225, null=True, blank=True)
@@ -63,3 +63,12 @@ class Like(models.Model):
     author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE)
     music = models.ForeignKey(Podcast, on_delete=models.CASCADE)
 
+
+class PlaylistBase(models.Model):
+    title = models.CharField(max_length=225)
+    author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE)
+
+
+class PlaylistSingle(models.Model):
+    base_playlist = models.ForeignKey(PlaylistBase, on_delete=models.CASCADE)
+    episode = models.ForeignKey(Podcast, on_delete=models.CASCADE)
