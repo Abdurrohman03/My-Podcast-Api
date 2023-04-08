@@ -1,10 +1,12 @@
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 
-from ..models import Tag, Category, Podcast, Comment, Like, PlaylistBase, PlaylistSingle, Season
+from ..models import Tag, Category, Podcast, Comment, Like, Playlist, PlaylistItem, Season
 from .serializers import TagSerializer, CategorySerializer, PodcastGETSerializer, PodcastPOSTSerializer, \
-    ComentGETSerializer, ComentPOSTSerializer, LikeGETSerializer, PlaylistSerializer, SeasonSerializer, \
-    PlaylistSingleSerializer, LikePOSTSerializer
-from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly
+    ComentGETSerializer, ComentPOSTSerializer, LikeGETSerializer, SeasonSerializer, LikePOSTSerializer, \
+    PlaylistGETSerializer, PlaylistPOSTSerializer, PlaylistGETiSerializer, MiniPlaylistItemSerializer, \
+    PlaylistItemGETSerializer, PlaylistItemPOSTSerializer
+from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly, IsOwner
 
 
 class TagListCreateAPIView(generics.ListCreateAPIView):
@@ -129,11 +131,62 @@ class LikePOSTAPIView(generics.CreateAPIView):
         ctx['music_id'] = self.kwargs.get('music_id')
         return ctx
 
+    def create(self, request, *args, **kwargs):
+        music_id = self.kwargs.get('music_id')
+        author_id = request.user.profile.id
+        likes = Like.objects.values_list('music_id', 'author_id')
+        if (music_id, author_id) in likes:
+            Like.objects.get(music_id=music_id, author_id=author_id).delete()
+            return Response("Un-liked")
+        instance = Like.objects.create(author_id=author_id, music_id=music_id)
+        serializer = LikePOSTSerializer(instance)
+        return Response(serializer.data)
 
-class LikeDELETEAPIView(generics.DestroyAPIView):
-    queryset = Like.objects.all()
-    serializer_class = LikePOSTSerializer
+
+class PlaylistListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Playlist.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PlaylistGETiSerializer
+        return PlaylistPOSTSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        author = self.request.user.profile
+        if author:
+            qs = qs.filter(author=author)
+            return qs
+        return []
 
 
+class PlaylistRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Playlist.objects.all()
+    permission_classes = [IsOwner]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PlaylistGETSerializer
+        return PlaylistPOSTSerializer
+
+
+class PlaylistItemCreateAPIView(generics.CreateAPIView):
+    queryset = PlaylistItem.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        music_id = self.request.data.get('episode')
+        playlist_id = self.kwargs.get('playlist_id')
+        music = PlaylistItem.objects.filter(episode_id=music_id, playlist_id=playlist_id)
+        if music:
+            music.delete()
+            return Response({'detail': 'Music has successfully removed from playlist'})
+        obj = PlaylistItem.objects.create(episode_id=music_id, playlist_id=playlist_id)
+        serializer = PlaylistItemGETSerializer(obj)
+        return Response(serializer.data)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return PlaylistItemGETSerializer
+        return PlaylistItemPOSTSerializer

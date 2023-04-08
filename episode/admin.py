@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Podcast, Comment, Season, Like, PlaylistBase, PlaylistSingle
+from .models import Podcast, Comment, Season, Like, Playlist, PlaylistItem
 
 
 @admin.register(Podcast)
@@ -20,6 +20,6 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(Season)
 admin.site.register(Like)
-admin.site.register(PlaylistBase)
-admin.site.register(PlaylistSingle)
+admin.site.register(Playlist)
+admin.site.register(PlaylistItem)
 

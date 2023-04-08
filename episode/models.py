@@ -64,11 +64,11 @@ class Like(models.Model):
     music = models.ForeignKey(Podcast, on_delete=models.CASCADE)
 
 
-class PlaylistBase(models.Model):
+class Playlist(models.Model):
+    author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=225)
-    author = models.ForeignKey('profile.Profile', on_delete=models.CASCADE)
 
 
-class PlaylistSingle(models.Model):
-    base_playlist = models.ForeignKey(PlaylistBase, on_delete=models.CASCADE)
-    episode = models.ForeignKey(Podcast, on_delete=models.CASCADE)
+class PlaylistItem(models.Model):
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, null=True, related_name='items')
+    episode = models.ForeignKey(Podcast, on_delete=models.CASCADE, null=True, related_name='podcast')

@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import CommentRUDAPIView, CommentListCreateAPIView, PodcastListCreateAPIView, CategoryListCreateAPIView, \
     TagListCreateAPIView, TagRUDAPIView, CategoryRUDAPIView, PodcastRUDAPIView, SeasonListAPIView, LikeListAPIView, \
-    LikePOSTAPIView
+    LikePOSTAPIView, PlaylistListCreateAPIView, PlaylistRUDAPIView, PlaylistItemCreateAPIView
 
 urlpatterns = [
     # tag
@@ -25,5 +25,12 @@ urlpatterns = [
 
     # like
     path('like-list/', LikeListAPIView.as_view()),
-    path('like/<int:music_id>/', LikePOSTAPIView.as_view()),
+    path('like-create/<int:music_id>/', LikePOSTAPIView.as_view()),
+
+    # playlist
+    path('playlist-list-create/', PlaylistListCreateAPIView.as_view()),
+    path('playlist-rud/<int:pk>/', PlaylistRUDAPIView.as_view()),
+
+    # playlist music
+    path('playlist/<int:playlist_id>/add/', PlaylistItemCreateAPIView.as_view()),
 ]

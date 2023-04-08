@@ -51,7 +51,7 @@ urlpatterns = [
     path('contact/', include('contact.api.urls')),
     path('profile/', include('profile.api.urls')),
     path('blog/', include('blog.api.urls')),
-    path('episode/', include('episode.api.urls')),
+    path('', include('episode.api.urls')),
 ]
 
 if settings.DEBUG:

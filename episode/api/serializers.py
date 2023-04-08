@@ -1,6 +1,6 @@
 from profile.api.serializers import ProfileSerializer
 from profile.models import Profile
-from ..models import Tag, Category, Season, Podcast, Comment, Like, PlaylistSingle, PlaylistBase
+from ..models import Tag, Category, Season, Podcast, Comment, Like, PlaylistItem, Playlist
 from rest_framework import serializers
 
 
@@ -99,22 +99,80 @@ class LikePOSTSerializer(serializers.ModelSerializer):
             'music': {'required': False},
         }
 
+
+class MiniPodcastSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source='author.user.username', read_only=True)
+    category = serializers.CharField(source='category.title', read_only=True)
+    tags = TagSerializer(read_only=True, many=True)
+    season = serializers.CharField(source='season.title', read_only=True)
+
+    class Meta:
+        model = Podcast
+        fields = '__all__'
+
+
+class MiniPlaylistItemSerializer(serializers.ModelSerializer):
+    episode = MiniPodcastSerializer(read_only=True)
+
+    class Meta:
+        model = PlaylistItem
+        fields = ['id', 'episode']
+
+
+class PlaylistGETSerializer(serializers.ModelSerializer):
+    items = MiniPlaylistItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Playlist
+        fields = ['id', 'title', 'author', 'items']
+
+
+class MiniiPodcastSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Podcast
+        fields = ['id', 'title', 'audio_file']
+
+
+class MiniiPlaylistItemSerializer(serializers.ModelSerializer):
+    episode = MiniiPodcastSerializer(read_only=True)
+
+    class Meta:
+        model = PlaylistItem
+        fields = ['id', 'episode']
+
+
+class PlaylistGETiSerializer(serializers.ModelSerializer):
+    items = MiniiPlaylistItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Playlist
+        fields = ['id', 'title', 'author', 'items']
+
+
+class PlaylistPOSTSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Playlist
+        fields = ['id', 'title', 'author']
+
     def create(self, validated_data):
         request = self.context.get('request')
-        music_id = self.context.get('music_id')
-        author_id = request.user.profile.id
-        instance = Like.objects.create(author_id=author_id, music_id=music_id)
+        author = request.user.profile
+        instance = super().create(validated_data)
+        instance.author = author
+        instance.save()
         return instance
 
 
+class PlaylistItemGETSerializer(serializers.ModelSerializer):
+    episode = MiniPodcastSerializer(read_only=True)
 
-class PlaylistSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PlaylistBase
-        fields = '__all__'
+        model = PlaylistItem
+        fields = ['id', 'episode']
 
 
-class PlaylistSingleSerializer(serializers.ModelSerializer):
+class PlaylistItemPOSTSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = PlaylistSingle
-        fields = '__all__'
+        model = PlaylistItem
+        fields = ['id', 'playlist', 'episode']
