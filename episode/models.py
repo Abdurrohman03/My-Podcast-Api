@@ -70,5 +70,5 @@ class Playlist(models.Model):
 
 
 class PlaylistItem(models.Model):
-    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, null=True, related_name='items')
-    episode = models.ForeignKey(Podcast, on_delete=models.CASCADE, null=True, related_name='podcast')
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE,  related_name='items')
+    episode = models.ForeignKey(Podcast, on_delete=models.CASCADE)

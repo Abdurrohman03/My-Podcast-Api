@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from ..models import Tag, Category, Podcast, Comment, Like, Playlist, PlaylistItem, Season
 from .serializers import TagSerializer, CategorySerializer, PodcastGETSerializer, PodcastPOSTSerializer, \
     ComentGETSerializer, ComentPOSTSerializer, LikeGETSerializer, SeasonSerializer, LikePOSTSerializer, \
-    PlaylistGETSerializer, PlaylistPOSTSerializer, PlaylistGETiSerializer, MiniPlaylistItemSerializer, \
+    PlaylistGETSerializer, PlaylistPOSTSerializer, MiniPlaylistItemSerializer, \
     PlaylistItemGETSerializer, PlaylistItemPOSTSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly, IsOwner
 
@@ -118,7 +118,7 @@ class LikeListAPIView(generics.ListAPIView):
         if author:
             qs = qs.filter(author=author)
             return qs
-        return qs
+        return []
 
 
 class LikePOSTAPIView(generics.CreateAPIView):
@@ -149,7 +149,7 @@ class PlaylistListCreateAPIView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return PlaylistGETiSerializer
+            return PlaylistGETSerializer
         return PlaylistPOSTSerializer
 
     def get_queryset(self):

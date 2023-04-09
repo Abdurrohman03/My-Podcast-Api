@@ -52,7 +52,6 @@ class PodcastPOSTSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class ComentGETSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source='author.user.username')
     article = serializers.CharField(source='article.title', read_only=True)
@@ -127,32 +126,13 @@ class PlaylistGETSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'author', 'items']
 
 
-class MiniiPodcastSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Podcast
-        fields = ['id', 'title', 'audio_file']
-
-
-class MiniiPlaylistItemSerializer(serializers.ModelSerializer):
-    episode = MiniiPodcastSerializer(read_only=True)
-
-    class Meta:
-        model = PlaylistItem
-        fields = ['id', 'episode']
-
-
-class PlaylistGETiSerializer(serializers.ModelSerializer):
-    items = MiniiPlaylistItemSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Playlist
-        fields = ['id', 'title', 'author', 'items']
-
-
 class PlaylistPOSTSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
         fields = ['id', 'title', 'author']
+        extra_kwargs = {
+            'author': {'required': False}
+        }
 
     def create(self, validated_data):
         request = self.context.get('request')
